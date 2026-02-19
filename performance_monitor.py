@@ -1,6 +1,6 @@
 # performance_monitor.py
 from collections import deque
-from PyQt6.QtCore import QObject, QTimer, pyqtSignal
+from PyQt6.QtCore import QObject, QTimer, pyqtSignal  # type: ignore[import]
 import psutil
 
 class PerformanceMonitor(QObject):

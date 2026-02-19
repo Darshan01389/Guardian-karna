@@ -3,10 +3,45 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Dict, Optional
 
-from PyQt6.QtWidgets import (
-    QDialog, QVBoxLayout, QLabel, QLineEdit, QComboBox,
-    QPushButton, QHBoxLayout, QMessageBox
-)
+# GUI imports are only needed when dialogs are used. We wrap in a
+# try/except so that the module can be imported in environments without
+# PyQt6 (e.g. during unit testing of non-GUI logic).
+try:
+    from PyQt6.QtWidgets import (  # type: ignore[import]
+        QDialog, QVBoxLayout, QLabel, QLineEdit, QComboBox,
+        QPushButton, QHBoxLayout, QMessageBox
+    )
+except ImportError:
+    # define no-op stand-ins for type checking / tests
+    class QDialog:
+        pass
+    class QVBoxLayout:
+        def __init__(self, *args, **kwargs):
+            pass
+    class QLabel:
+        def __init__(self, *args, **kwargs):
+            pass
+    class QLineEdit:
+        def __init__(self, *args, **kwargs):
+            pass
+    class QComboBox:
+        def __init__(self, *args, **kwargs):
+            pass
+    class QPushButton:
+        def __init__(self, *args, **kwargs):
+            pass
+        def clicked(self):
+            class Dummy:
+                def connect(self, *args, **kwargs):
+                    pass
+            return Dummy()
+    class QHBoxLayout:
+        def __init__(self, *args, **kwargs):
+            pass
+    class QMessageBox:
+        @staticmethod
+        def warning(*args, **kwargs):
+            pass
 
 from mode_manager import SubscriptionTier
 

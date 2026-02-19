@@ -1,6 +1,6 @@
 # security_engine.py
 import random
-from PyQt6.QtCore import QObject, pyqtSignal, QTimer
+from PyQt6.QtCore import QObject, pyqtSignal, QTimer  # type: ignore[import]
 
 class SecurityEngine(QObject):
     pre_scan_completed = pyqtSignal(str, str)  # url, risk_level

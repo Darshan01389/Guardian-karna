@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from typing import List
 import time
 
-from PyQt6.QtWidgets import (
+from PyQt6.QtWidgets import (  # type: ignore[import]
     QDialog, QVBoxLayout, QLabel, QPushButton,
     QListWidget, QListWidgetItem, QHBoxLayout
 )

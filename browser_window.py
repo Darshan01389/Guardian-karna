@@ -1,20 +1,21 @@
 # browser_window.py
 from collections import deque
 from typing import Deque
+import os
 import time
 from urllib.parse import urlparse
 
-from PyQt6.QtCore import Qt, QUrl, QEvent, QTimer
-from PyQt6.QtGui import QAction, QPainter, QPen, QFont
-from PyQt6.QtWidgets import (
+from PyQt6.QtCore import Qt, QUrl, QEvent, QTimer  # type: ignore[import]
+from PyQt6.QtGui import QAction, QPainter, QPen, QFont  # type: ignore[import]
+from PyQt6.QtWidgets import (  # type: ignore[import]
     QMainWindow, QToolBar, QLineEdit, QToolButton,
     QDockWidget, QWidget, QVBoxLayout, QLabel, QComboBox,
     QStatusBar, QMessageBox, QMenu, QMenuBar,
     QPushButton, QHBoxLayout, QListWidget, QListWidgetItem,
     QDialog, QStackedWidget, QFileDialog
 )
-from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtWebEngineCore import QWebEngineDownloadRequest
+from PyQt6.QtWebEngineWidgets import QWebEngineView  # type: ignore[import]
+from PyQt6.QtWebEngineCore import QWebEngineDownloadRequest  # type: ignore[import]
 
 from mode_manager import ModeManager, SecurityMode, SubscriptionTier
 from security_engine import SecurityEngine
@@ -826,7 +827,6 @@ class BrowserWindow(QMainWindow):
         # Set directory and file name
         # QWebEngineDownloadRequest expects directory + file name separately
         # We'll split them from save_path
-        import os
         directory, fname = os.path.split(save_path)
         if directory:
             download.setDownloadDirectory(directory)
@@ -1213,6 +1213,8 @@ class BrowserWindow(QMainWindow):
                 return
 
             self._deep_scan_running = False
+            # record the final risk as the current risk for future logs
+            self._current_risk = final_risk
             self.scan_status_label.setText(f"Deep scan: {final_risk.upper()}")
 
             action = "allowed"
@@ -1231,6 +1233,7 @@ class BrowserWindow(QMainWindow):
                     "</body></html>"
                 )
             elif self.safe_mode_label.text():
+                # page was loaded in safe mode earlier
                 action = "safe_mode"
 
             self._log_event(url, self._current_risk or "unknown", final_risk, action)
